@@ -1,0 +1,14 @@
+from collections import Counter
+
+class Solution:
+    def firstUniqChar(self, s):
+        # Pass 1: Build the frequency map
+        count = Counter(s)
+        
+        # Pass 2: Find the first character with a count of 1
+        for index, char in enumerate(s):
+            if count[char] == 1:
+                return index
+                
+        return -1
+
