@@ -1,0 +1,11 @@
+import random
+from collections import defaultdict
+
+class Solution:
+    def __init__(self, nums):
+        self.indices = defaultdict(list)
+        for index, num in enumerate(nums):
+            self.indices[num].append(index)
+
+    def pick(self, target):
+        return random.choice(self.indices[target])
