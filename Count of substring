@@ -1,0 +1,31 @@
+class Solution:
+    def countOfSubstrings(self, word, k):
+        def countAtLeast(target_k):
+            vowels = {'a', 'e', 'i', 'o', 'u'}
+            vowel_count = {}
+            consonants = 0
+            substring_count = 0
+            start = 0
+            
+            for end in range(len(word)):
+                char = word[end]
+                if char in vowels:
+                    vowel_count[char] = vowel_count.get(char, 0) + 1
+                else:
+                    consonants += 1
+                
+                while len(vowel_count) == 5 and consonants >= target_k:
+                    left_char = word[start]
+                    if left_char in vowels:
+                        vowel_count[left_char] -= 1
+                        if vowel_count[left_char] == 0:
+                            del vowel_count[left_char]
+                    else:
+                        consonants -= 1
+                    start += 1
+                
+                substring_count += start
+                
+            return substring_count
+
+        return countAtLeast(k) - countAtLeast(k + 1)
