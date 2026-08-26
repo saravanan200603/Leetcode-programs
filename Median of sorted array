@@ -1,0 +1,47 @@
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) {
+    // Ensure nums1 is the smaller array to minimize the binary search range
+    if (nums1Size > nums2Size) {
+        return findMedianSortedArrays(nums2, nums2Size, nums1, nums1Size);
+    }
+    
+    int m = nums1Size;
+    int n = nums2Size;
+    int low = 0;
+    int high = m;
+    int totalLeft = (m + n + 1) / 2;
+    
+    while (low <= high) {
+        int partition1 = (low + high) / 2;
+        int partition2 = totalLeft - partition1;
+        
+        // Handle empty left or right partitions using ternary operators
+        double maxLeft1 = (partition1 == 0) ? -1e9 : nums1[partition1 - 1];
+        double minRight1 = (partition1 == m) ? 1e9 : nums1[partition1];
+        
+        double maxLeft2 = (partition2 == 0) ? -1e9 : nums2[partition2 - 1];
+        double minRight2 = (partition2 == n) ? 1e9 : nums2[partition2];
+        
+        // Check if we found the correct partition
+        if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
+            // Odd total length
+            if ((m + n) % 2 == 1) {
+                return MAX(maxLeft1, maxLeft2);
+            } 
+            // Even total length
+            else {
+                return (MAX(maxLeft1, maxLeft2) + MIN(minRight1, minRight2)) / 2.0;
+            }
+        }
+        // Adjust binary search range
+        else if (maxLeft1 > minRight2) {
+            high = partition1 - 1;
+        } else {
+            low = partition1 + 1;
+        }
+    }
+    
+    return 0.0;
+}
